@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -16,14 +17,17 @@ var db *sql.DB
 var err error
 
 const Port = "1313"
-const KodZavodu = "cc_mcr_a_pohar_cams_sikluv_mlyn_1"
-const RaceYear = "2020"
-const SqlZavody = "zavody_" + RaceYear
-const SqlPodzavody = "podzavody_" + RaceYear
-const SqlKategorie = "kategorie_" + RaceYear
-const SqlOsoby = "osoby"
 
-var SqlZavod = "zavod_" + KodZavodu + "_" + RaceYear
+// KodZavodu
+var KodZavodu = "cc_mcr_a_pohar_cams_sikluv_mlyn_1"
+var currentTime = time.Now()
+
+var RaceYear = currentTime.Year()
+var SqlPodzavody = "podzavody_" + strconv.Itoa(RaceYear)
+var SqlKategorie = "kategorie_" + strconv.Itoa(RaceYear)
+var SqlOsoby = "osoby"
+var SqlZavody = "zavody_" + strconv.Itoa(RaceYear)
+var SqlZavod = "zavod_" + KodZavodu + "_" + strconv.Itoa(RaceYear)
 
 func index(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("fungujem")
