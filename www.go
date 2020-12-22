@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 )
@@ -17,7 +17,7 @@ type NejblizsiZavod struct {
 }
 
 //NejblizsiZavody vrací seznam 4 nejbližšéch závodů
-func NejblizsiZavody(w http.ResponseWriter, r *http.Request) {
+func NejblizsiZavody() []NejblizsiZavod {
 	var nejblizsiZavody []NejblizsiZavod
 
 	sql1 :=
@@ -61,10 +61,11 @@ func NejblizsiZavody(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	json.NewEncoder(w).Encode(nejblizsiZavody)
+	//json.NewEncoder(w).Encode(nejblizsiZavody)
+	return nejblizsiZavody
 }
 
-func PosledniVysledky(w http.ResponseWriter, r *http.Request) {
+func PosledniVysledky() []NejblizsiZavod {
 	var posledniVysledky []NejblizsiZavod
 	var posledniVysledek NejblizsiZavod
 
@@ -77,6 +78,8 @@ func PosledniVysledky(w http.ResponseWriter, r *http.Request) {
 			" z.datum_zavodu  <= CURDATE() AND" +
 			" z.nove_vysledky  < 1 AND" +
 			" ORDER BY z.datum_zavodu ASC LIMIT 0,4"
+
+	fmt.Println(sql1)
 
 	results, err := db.Query(sql1)
 	if err != nil {
@@ -113,5 +116,13 @@ func PosledniVysledky(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	json.NewEncoder(w).Encode(posledniVysledky)
+	//json.NewEncoder(w).Encode(posledniVysledky)
+	return posledniVysledky
+}
+
+func Neco(w http.ResponseWriter, r *http.Request) {
+	//var x [2]struct{}
+	x := PosledniVysledky()
+	fmt.Println(x)
+
 }

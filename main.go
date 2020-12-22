@@ -43,7 +43,7 @@ func main() {
 		fmt.Println(r)
 
 	}).Methods("GET")
-	router.HandleFunc("/homepage/nejblizsi-zavody", NejblizsiZavody).Methods("GET")
+	router.HandleFunc("/homepage/nejblizsi-zavody", Neco).Methods("GET")
 
 	db, err = sql.Open("mysql", "skybedy:mk1313life@tcp(127.0.0.1:3306)/timechip_cz?multiStatements=true")
 	if err != nil {
