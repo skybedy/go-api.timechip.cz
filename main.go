@@ -29,6 +29,19 @@ var SqlOsoby = "osoby"
 var SqlZavody = "zavody_" + strconv.Itoa(RaceYear)
 var SqlZavod = "zavod_" + KodZavodu + "_" + strconv.Itoa(RaceYear)
 
+type Sqlstr struct {
+	Zavody string
+}
+
+var s map[string]string
+
+func Sql(raceYear string) []string {
+	s := make(map[string][]string)
+	s["zavody"] = "zavod_"
+	//return sql
+
+}
+
 func index(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("fungujem")
 	fmt.Printf("%v\n", "tady")
@@ -44,6 +57,7 @@ func main() {
 
 	}).Methods("GET")
 	router.HandleFunc("/homepage/nejblizsi-zavody", Neco).Methods("GET")
+	router.HandleFunc("/homepage/zavody/{race-year}", Zavody).Methods("GET")
 
 	db, err = sql.Open("mysql", "skybedy:mk1313life@tcp(127.0.0.1:3306)/timechip_cz?multiStatements=true")
 	if err != nil {

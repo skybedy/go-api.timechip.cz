@@ -1,9 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 //NejblizsiZavod je struktura pro func NejblizsiZavody
@@ -76,10 +79,10 @@ func PosledniVysledky() []NejblizsiZavod {
 			" z.typ_zavodu = tz.id_typ_zavodu AND" +
 			" z.zverejneni > 0 AND " +
 			" z.datum_zavodu  <= CURDATE() AND" +
-			" z.nove_vysledky  < 1 AND" +
-			" ORDER BY z.datum_zavodu ASC LIMIT 0,4"
+			" z.nove_vysledky  < 1" +
+			" ORDER BY z.datum_zavodu DESC LIMIT 0,4"
 
-	fmt.Println(sql1)
+	//fmt.Println(sql1)
 
 	results, err := db.Query(sql1)
 	if err != nil {
@@ -101,8 +104,8 @@ func PosledniVysledky() []NejblizsiZavod {
 				" z.typ_zavodu = tz.id_typ_zavodu AND" +
 				" z.zverejneni > 0 AND " +
 				" z.datum_zavodu  <= CURDATE() AND" +
-				" z.nove_vysledky  < 1 AND" +
-				" ORDER BY z.datum_zavodu ASC LIMIT 0,4"
+				" z.nove_vysledky  < 1" +
+				" ORDER BY z.datum_zavodu DESC LIMIT 0,4"
 
 		results, err := db.Query(sql2)
 		if err != nil {
@@ -121,8 +124,35 @@ func PosledniVysledky() []NejblizsiZavod {
 }
 
 func Neco(w http.ResponseWriter, r *http.Request) {
-	//var x [2]struct{}
-	x := PosledniVysledky()
-	fmt.Println(x)
+	y := make(map[string][]NejblizsiZavod)
+	y["nejblizsi_zavody"] = NejblizsiZavody()
+	y["posledni_vysledky"] = PosledniVysledky()
+
+	fmt.Println(y)
+	json.NewEncoder(w).Encode(y)
+
+}
+
+type ZavodySJson struct {
+	IDZavodu       string `json:"id_zavodu"`
+	NazevZavodu    string `json:"nazev_zavodu"`
+	KodZavodu      string `json:"kod_zavodu"`
+	DatumZavodu    string `json:"datum_zavodu"`
+	DenZavodu      string `json:"den_zavodu"`
+	DenZavoduKonec string `json:"den_zavodu_konec"`
+	MistoZavodu    string `json:"misto_zavodu"`
+	Prihlasky      string `json:"prihlasky"`
+	NoveVysledky   string `json:"nove_vysledky"`
+	Web            string `json:"web"`
+	Icon           string `json:"icon"`
+}
+
+func Zavody(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	fmt.Println(SqlZavody)
+
+	sql1 := "SELECT " + SqlZavody + ".id_zavodu," + SqlZavody + ".nazev_zavodu,DATE_FORMAT(" + SqlZavody + ".datum_zavodu,'%e. %c') AS datum,DATE_FORMAT(" + SqlZavody + ".datum_zavodu,'%e') AS den_zavodu,DATE_FORMAT(" + SqlZavody + ".datum_zavodu_konec,'%e. %c') AS datum_zavodu_konec," + SqlZavody + ".misto_zavodu," + SqlZavody + ".web," + SqlZavody + ".prihlasky," + SqlZavody + ".nove_vysledky,typ_zavodu.typ_zavodu," + vars["race-year"] + " AS year FROM " + SqlZavody + ",typ_zavodu WHERE " + SqlZavody + ".typ_zavodu = typ_zavodu.id_typ_zavodu AND zverejneni > 0 ORDER BY datum_zavodu,nazev_zavodu"
+	fmt.Println(sql1)
+	//json.NewEncoder(w).Encode(y)
 
 }
