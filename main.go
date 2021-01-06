@@ -10,7 +10,7 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/gorilla/mux"
+	"go-api.timechip.cz/routes"
 )
 
 var db *sql.DB
@@ -19,6 +19,7 @@ var err error
 const Port = "1313"
 
 // KodZavodu
+/*
 var KodZavodu = "cc_mcr_a_pohar_cams_sikluv_mlyn_1"
 var currentTime = time.Now()
 
@@ -28,36 +29,23 @@ var SqlKategorie = "kategorie_" + strconv.Itoa(RaceYear)
 var SqlOsoby = "osoby"
 var SqlZavody = "zavody_" + strconv.Itoa(RaceYear)
 var SqlZavod = "zavod_" + KodZavodu + "_" + strconv.Itoa(RaceYear)
+*/
 
-type Sqlstr struct {
-	Zavody string
+func TestFunc1(RaceYear string, RaceCode int) {
+	//fmt.Println(TestConst)
+	fmt.Println(RaceYear + "," + strconv.Itoa(RaceCode))
 }
 
-var s map[string]string
+var SqlZavodySc string
+var SqlZavodyBc string
 
-func Sql(raceYear string) []string {
-	s := make(map[string][]string)
-	s["zavody"] = "zavod_"
-	//return sql
-
-}
-
-func index(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("fungujem")
-	fmt.Printf("%v\n", "tady")
-	//json.NewEncoder(w).Encode("Still alive!")
+func SqlZkatky(RaceYear string) {
+	SqlZavodySc = "zavody_" + RaceYear + " zd,"
+	SqlZavodyBc = "zavody_" + RaceYear + " zd"
 }
 
 func main() {
-	router := mux.NewRouter()
-	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "timechip API")
-		//fmt.Fprintf(os.Stdout, "timechip API stdout")
-		fmt.Println(r)
-
-	}).Methods("GET")
-	router.HandleFunc("/homepage/nejblizsi-zavody", Neco).Methods("GET")
-	router.HandleFunc("/homepage/zavody/{race-year}", Zavody).Methods("GET")
+	router := routes.NewRouter()
 
 	db, err = sql.Open("mysql", "skybedy:mk1313life@tcp(127.0.0.1:3306)/timechip_cz?multiStatements=true")
 	if err != nil {
