@@ -1,4 +1,4 @@
-package main
+package routes
 
 import (
 	"encoding/json"
@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"go-api.timechip.cz/utils"
 )
 
 //NejblizsiZavod je struktura pro func NejblizsiZavody
@@ -20,12 +21,14 @@ type NejblizsiZavod struct {
 }
 
 //NejblizsiZavody vrací seznam 4 nejbližšéch závodů
-func NejblizsiZavody() []NejblizsiZavod {
+func NejblizsiZavody(RaceYear string) []NejblizsiZavod {
+	utils.SqlShorcuts(RaceYear)
+
 	var nejblizsiZavody []NejblizsiZavod
 
 	sql1 :=
 		"SELECT z.id_zavodu,z.nazev_zavodu,z.kod_zavodu,DATE_FORMAT(z.datum_zavodu,'%e.%c.%Y') AS datum,tz.icon,z.web" +
-			" FROM " + SqlZavody + " z,typ_zavodu tz" +
+			" FROM " + SQLZavodySc + "typ_zavodu tz" +
 			" WHERE" +
 			" z.datum_zavodu  > CURDATE() AND" +
 			" z.typ_zavodu = tz.id_typ_zavodu" +
@@ -68,7 +71,7 @@ func NejblizsiZavody() []NejblizsiZavod {
 	return nejblizsiZavody
 }
 
-func PosledniVysledky() []NejblizsiZavod {
+func PosledniVysledky(RaceYear string) []NejblizsiZavod {
 	var posledniVysledky []NejblizsiZavod
 	var posledniVysledek NejblizsiZavod
 
@@ -124,9 +127,10 @@ func PosledniVysledky() []NejblizsiZavod {
 }
 
 func Neco(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
 	y := make(map[string][]NejblizsiZavod)
-	y["nejblizsi_zavody"] = NejblizsiZavody()
-	y["posledni_vysledky"] = PosledniVysledky()
+	y["nejblizsi_zavody"] = NejblizsiZavody(vars["race_year"])
+	y["posledni_vysledky"] = PosledniVysledky(vars["race_year"])
 
 	fmt.Println(y)
 	json.NewEncoder(w).Encode(y)

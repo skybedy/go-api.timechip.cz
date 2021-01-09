@@ -1,4 +1,4 @@
-module github.com/skybedy/go-api.timechip.cz
+module go-api.timechip.cz
 
 go 1.13
 

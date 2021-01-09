@@ -1,13 +1,17 @@
 package routes
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
-func NewRouter() *mux.Router {
+
+
+
+func NewRouter(db *sql.DB) *mux.Router {
 	router := mux.NewRouter()
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "timechip API")
@@ -17,7 +21,7 @@ func NewRouter() *mux.Router {
 	}).Methods("GET")
 	router.HandleFunc("/homepage/nejblizsi-zavody", Neco).Methods("GET")
 	router.HandleFunc("/homepage/zavody/{race-year}", Zavody).Methods("GET")
-	
+
 	staticFileDirectory := http.Dir("./static/")
 	// Declare the handler, that routes requests to their respective filename.
 	// The fileserver is wrapped in the `stripPrefix` method, because we want to
