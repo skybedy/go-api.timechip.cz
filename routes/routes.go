@@ -1,17 +1,13 @@
 package routes
 
 import (
-	"database/sql"
 	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
-
-
-
-func NewRouter(db *sql.DB) *mux.Router {
+func NewRouter() *mux.Router {
 	router := mux.NewRouter()
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "timechip API")

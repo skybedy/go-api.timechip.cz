@@ -7,23 +7,25 @@ import (
 	"os"
 	"time"
 
+	db "go-api.timechip.cz/database"
 	"go-api.timechip.cz/routes"
 )
 
-var db *sql.DB
+//var db *sql.DB
 var err error
 
 const Port = "1313"
 
 func main() {
 
-	db, err = sql.Open("mysql", "skybedy:mk1313life@tcp(127.0.0.1:3306)/timechip_cz?multiStatements=true")
+	db.Mdb, err = sql.Open("mysql", "skybedy:mk1313life@tcp(127.0.0.1:3306)/timechip_cz?multiStatements=true")
 	if err != nil {
 		panic(err.Error())
 	}
-	defer db.Close()
 
-	router := routes.NewRouter(db)
+	defer db.Mdb.Close()
+
+	router := routes.NewRouter()
 
 	log.Flags()
 

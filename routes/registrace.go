@@ -48,11 +48,11 @@ func dataDalsiUdaje(w http.ResponseWriter, r *http.Request) {
 	}
 	sql1 += "tricka FROM prihlasky_" + vars["race_year"] + " WHERE id_zavodu = " + vars["race_id"]
 
-	err = db.QueryRow(sql1).Scan(&dalsiUdaje.DalsiUdaje1, &dalsiUdaje.Tricka)
+	/*	err = db.QueryRow(sql1).Scan(&dalsiUdaje.DalsiUdaje1, &dalsiUdaje.Tricka)
 
-	if err != nil {
-		panic(err.Error())
-	}
+		if err != nil {
+			panic(err.Error())
+		}*/
 	//println(dalsiUdaje.Tricka)
 	stringSlice := strings.Split(dalsiUdaje.Tricka, ",")
 	//fmt.Printf("%v\n", stringSlice)
@@ -60,11 +60,13 @@ func dataDalsiUdaje(w http.ResponseWriter, r *http.Request) {
 
 }
 
+/*
 func dataKategorie(w http.ResponseWriter, r *http.Request) {
 	var categories []DataCategory
 	vars := mux.Vars(r)
 	sql1 := "SELECT id_kategorie,poradi AS poradi_kategorie,nazev_k AS nazev_kategorie FROM kategorie_" + vars["race_year"] + " k WHERE id_zavodu = " + vars["race_id"] + " ORDER BY poradi_kategorie"
 	//fmt.Fprintf(w, sql1)
+
 	results, err := db.Query(sql1)
 	if err != nil {
 		panic(err.Error())
@@ -79,8 +81,9 @@ func dataKategorie(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(categories)
 	//og.Println(categories)
 
-}
+}*/
 
+/*
 func dataPodzavody(w http.ResponseWriter, r *http.Request) {
 	var posts []EventData
 
@@ -104,3 +107,4 @@ func dataPodzavody(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(posts)
 
 }
+*/

@@ -1,12 +1,7 @@
 package routes
 
 import (
-	"database/sql"
-	"encoding/json"
-	"net/http"
 	"strings"
-
-	"github.com/gorilla/mux"
 )
 
 //NiceString1 return...první varianta, kdy se to dělalo ze Slice a ne ze Stringu, jestli to má budoucnost, nevím
@@ -22,27 +17,30 @@ func NiceString(str string) string {
 	return strings.ToLower(str)
 }
 
+/*
 type Osoba struct {
-	Ido       int            `json:"ido"`
-	Firstname string         `json:"firstname"`
-	Surname   string         `json:"surname"`
-	BirthYear int            `json:"birthYear"`
-	Gender    string         `json:"gender"`
-	Country   string         `json:"country"`
-	Team      sql.NullString `json:"team"`
-	NewNumber int            `json:"newNumber"`
-}
+	Ido       int    `json:"ido"`
+	Firstname string `json:"firstname"`
+	Surname   string `json:"surname"`
+	BirthYear int    `json:"birthYear"`
+	Gender    string `json:"gender"`
+	Country   string `json:"country"`
+	//Team      sql.NullString `json:"team"`
+	NewNumber int `json:"newNumber"`
+}*/
 
 type Osoby1 struct {
 	Ido   int    `json:"ido"`
 	Label string `json:"label"`
 }
 
+/*
 type IdsJmenoOsoby struct {
 	Ids   sql.NullInt64 `json:"ids"`
 	Jmeno string        `json:"jmeno"`
-}
+}*/
 
+/*
 func PersonDetails(w http.ResponseWriter, r *http.Request) {
 	var idsJmenoOsoby IdsJmenoOsoby
 	ido := mux.Vars(r)["ido"]
@@ -81,7 +79,9 @@ func PersonDetails(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(osoba)
 	}
 
-}
+}*/
+
+/*
 
 func FindName(w http.ResponseWriter, r *http.Request) {
 	var osoby []Osoby1
@@ -106,3 +106,4 @@ func FindName(w http.ResponseWriter, r *http.Request) {
 	//Headers(w)
 	json.NewEncoder(w).Encode(osoby)
 }
+*/

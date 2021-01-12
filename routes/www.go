@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"go-api.timechip.cz/utils"
+	"go-api.timechip.cz/db"
 )
 
 //NejblizsiZavod je struktura pro func NejblizsiZavody
@@ -20,11 +20,28 @@ type NejblizsiZavod struct {
 	Icon        string `json:"icon"`
 }
 
+func SqlShorcuts(RaceYear string) {
+	SQLZavodySc = "zavody_" + RaceYear + " zv,"
+	SQLZavodySc = "zavody_" + RaceYear + " zv"
+}
+
+func StringIntSum(AnyString string, Addition int) string {
+	intFromString, err := strconv.Atoi(AnyString)
+	if err != nil {
+	}
+	result := intFromString + Addition
+	return strconv.Itoa(result)
+}
+
 //NejblizsiZavody vrací seznam 4 nejbližšéch závodů
 func NejblizsiZavody(RaceYear string) []NejblizsiZavod {
-	utils.SqlShorcuts(RaceYear)
+	SqlShorcuts(RaceYear)
 
 	var nejblizsiZavody []NejblizsiZavod
+	//NextRaceYear, err := strconv.Atoi(RaceYear)
+	//if err != nil {
+	//}
+	//NextRaceYear = NextRaceYear + 1
 
 	sql1 :=
 		"SELECT z.id_zavodu,z.nazev_zavodu,z.kod_zavodu,DATE_FORMAT(z.datum_zavodu,'%e.%c.%Y') AS datum,tz.icon,z.web" +
@@ -34,7 +51,7 @@ func NejblizsiZavody(RaceYear string) []NejblizsiZavod {
 			" z.typ_zavodu = tz.id_typ_zavodu" +
 			" ORDER BY z.datum_zavodu ASC LIMIT 0,4"
 
-	results, err := db.Query(sql1)
+	results, err := db.Mdb.Query(sql1)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -48,13 +65,14 @@ func NejblizsiZavody(RaceYear string) []NejblizsiZavod {
 	if pocetZavodu < 4 {
 		sql2 :=
 			"SELECT z.id_zavodu,z.nazev_zavodu,z.kod_zavodu,DATE_FORMAT(z.datum_zavodu,'%e.%c.%Y') AS datum,tz.icon,z.web" +
-				" FROM zavody_" + strconv.Itoa(RaceYear+1) + " z,typ_zavodu tz" +
+				" FROM zavody_" + StringIntSum(RaceYear, 1) + " z,typ_zavodu tz" +
 				" WHERE" +
 				" z.datum_zavodu  > CURDATE() AND" +
 				" z.typ_zavodu = tz.id_typ_zavodu" +
 				" ORDER BY z.datum_zavodu ASC LIMIT 0," + strconv.Itoa(4-pocetZavodu)
+		fmt.Println(sql2)
 
-		results, err := db.Query(sql2)
+		results, err := database.Db.Query(sql2)
 		if err != nil {
 			panic(err.Error())
 		}
@@ -77,7 +95,7 @@ func PosledniVysledky(RaceYear string) []NejblizsiZavod {
 
 	sql1 :=
 		"SELECT z.id_zavodu,z.nazev_zavodu,z.kod_zavodu,DATE_FORMAT(z.datum_zavodu,'%e.%c.%Y') AS datum,tz.icon,z.web" +
-			" FROM " + SqlZavody + " z,typ_zavodu tz" +
+			" FROM " + SQLZavodySc + "typ_zavodu tz" +
 			" WHERE" +
 			" z.typ_zavodu = tz.id_typ_zavodu AND" +
 			" z.zverejneni > 0 AND " +
