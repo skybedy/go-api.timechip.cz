@@ -7,7 +7,9 @@ import (
 	"os"
 	"time"
 
-	db "go-api.timechip.cz/database"
+	_ "github.com/go-sql-driver/mysql"
+	"go-api.timechip.cz/conf"
+	"go-api.timechip.cz/db"
 	"go-api.timechip.cz/routes"
 )
 
@@ -18,7 +20,7 @@ const Port = "1313"
 
 func main() {
 
-	db.Mdb, err = sql.Open("mysql", "skybedy:mk1313life@tcp(127.0.0.1:3306)/timechip_cz?multiStatements=true")
+	db.Mdb, err = sql.Open(conf.DbDriver, conf.DbUser+":"+conf.DbPass+"@/"+conf.DbName)
 	if err != nil {
 		panic(err.Error())
 	}

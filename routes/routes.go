@@ -12,10 +12,10 @@ func NewRouter() *mux.Router {
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "timechip API")
 		//fmt.Fprintf(os.Stdout, "timechip API stdout")
-		fmt.Println(r)
+		fmt.Println("ahoj")
 
 	}).Methods("GET")
-	router.HandleFunc("/homepage/nejblizsi-zavody", Neco).Methods("GET")
+	router.HandleFunc("/homepage/nejblizsi-zavody/{race-year}", Neco).Methods("GET")
 	router.HandleFunc("/homepage/zavody/{race-year}", Zavody).Methods("GET")
 
 	staticFileDirectory := http.Dir("./static/")
