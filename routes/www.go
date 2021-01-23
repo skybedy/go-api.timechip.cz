@@ -2,7 +2,6 @@ package routes
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -167,7 +166,6 @@ func Zavody(w http.ResponseWriter, r *http.Request) {
 		"zv.typ_zavodu = typ_zavodu.id_typ_zavodu AND " +
 		"zverejneni > 0 " +
 		"ORDER BY zv.datum_zavodu,zv.nazev_zavodu"
-	fmt.Println(sql1)
 
 	results, err := db.Mdb.Query(sql1)
 	if err != nil {
