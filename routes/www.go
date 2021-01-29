@@ -2,6 +2,7 @@ package routes
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -142,6 +143,7 @@ type ZavodySJson struct {
 }
 
 func Zavody(w http.ResponseWriter, r *http.Request) {
+	log.Printf("%s %s %s\n", r.RemoteAddr, r.Method, r.URL)
 	var Zavody []ZavodySJson
 	var Zavod ZavodySJson
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -13,7 +14,6 @@ import (
 	"go-api.timechip.cz/routes"
 )
 
-//var db *sql.DB
 var err error
 
 const Port = "1312"
@@ -24,14 +24,24 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
-
 	defer db.Mdb.Close()
+
+	logFile, err := os.OpenFile("log-program.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer logFile.Close()
+	log.SetOutput(logFile)
 
 	router := routes.NewRouter()
 
-	log.Flags()
-
 	port, ok := os.LookupEnv("PORT")
+
+	if err != nil {
+		panic(err.Error())
+	}
+
 	if !ok {
 		port = Port
 	}
@@ -45,7 +55,10 @@ func main() {
 		ReadTimeout:  15 * time.Second,
 	}
 
-	log.Println("main: running simple server on port", port)
+	log.Println("Spouští se http server na portu", port)
+	fmt.Println("Spouští se server na portu", port)
 	if err := server.ListenAndServe(); err != nil {
+		log.Fatal(err)
 	}
+
 }

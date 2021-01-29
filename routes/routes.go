@@ -3,18 +3,28 @@ package routes
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 )
 
+func Index(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "timechip API")
+	fmt.Fprintf(os.Stdout, "timechip API stdout\n")
+	fmt.Println("ahoj")
+}
+
+func messageHandler(message string) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte(message))
+	})
+}
+
 func NewRouter() *mux.Router {
 	router := mux.NewRouter()
-	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "timechip API")
-		//fmt.Fprintf(os.Stdout, "timechip API stdout")
-		fmt.Println("ahoj")
 
-	}).Methods("GET")
+	router.HandleFunc("/", Index).Methods("GET")
+
 	router.HandleFunc("/homepage/nejblizsi-zavody/{race-year}", Neco).Methods("GET")
 	router.HandleFunc("/homepage/zavody/{race-year}", Zavody).Methods("GET")
 
