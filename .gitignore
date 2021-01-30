@@ -15,4 +15,7 @@
 # vendor/
 
 conf.go
-*.log
+server.log
+app.log
+
+
