@@ -15,4 +15,4 @@
 # vendor/
 
 conf.go
-#*.log
+*.log
