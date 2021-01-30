@@ -6,6 +6,5 @@ const DbPass = "mk1313life"
 const DbName = "timechip_cz"
 
 const AppPath = "."
-const neco = "bla"
 
 //const AppPath = "/var/www/timechip.cz/go-api.timechip.cz"
