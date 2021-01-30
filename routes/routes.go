@@ -2,10 +2,14 @@ package routes
 
 import (
 	"fmt"
+	"io"
+	"log"
 	"net/http"
 	"os"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/justinas/alice"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -14,19 +18,23 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("ahoj")
 }
 
-func messageHandler(message string) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(message))
-	})
+func newLoggingHandler(dst io.Writer) func(http.Handler) http.Handler {
+	return func(h http.Handler) http.Handler {
+		return handlers.LoggingHandler(dst, h)
+	}
 }
 
 func NewRouter() *mux.Router {
+	logFile, err := os.OpenFile("./log/server.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0664)
+	if err != nil {
+		log.Fatal()
+	}
+	loggingHandler := newLoggingHandler(logFile)
+	stdChain := alice.New(loggingHandler)
 	router := mux.NewRouter()
-
-	router.HandleFunc("/", Index).Methods("GET")
-
-	router.HandleFunc("/homepage/nejblizsi-zavody/{race-year}", Neco).Methods("GET")
-	router.HandleFunc("/homepage/zavody/{race-year}", Zavody).Methods("GET")
+	router.Handle("/", stdChain.Then(http.HandlerFunc(Index)))
+	router.Handle("/homepage/nejblizsi-zavody/{race-year}", stdChain.Then(http.HandlerFunc(Neco))).Methods("GET")
+	router.Handle("/homepage/zavody/{race-year}", stdChain.Then(http.HandlerFunc(Zavody))).Methods("GET")
 
 	staticFileDirectory := http.Dir("./static/")
 	// Declare the handler, that routes requests to their respective filename.

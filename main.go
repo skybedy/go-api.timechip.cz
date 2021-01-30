@@ -26,7 +26,7 @@ func main() {
 	}
 	defer db.Mdb.Close()
 
-	logFile, err := os.OpenFile("log-program.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	logFile, err := os.OpenFile("./log/app.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 
 	if err != nil {
 		log.Fatalf("error opening file: %v", err)
@@ -60,5 +60,4 @@ func main() {
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatal(err)
 	}
-
 }
