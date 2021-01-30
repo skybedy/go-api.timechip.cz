@@ -10,6 +10,7 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/justinas/alice"
+	"go-api.timechip.cz/conf"
 )
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -25,7 +26,7 @@ func newLoggingHandler(dst io.Writer) func(http.Handler) http.Handler {
 }
 
 func NewRouter() *mux.Router {
-	logFile, err := os.OpenFile("./log/server.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0664)
+	logFile, err := os.OpenFile(conf.AppPath+"/log/server.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0664)
 	if err != nil {
 		log.Fatal()
 	}
@@ -36,7 +37,7 @@ func NewRouter() *mux.Router {
 	router.Handle("/homepage/nejblizsi-zavody/{race-year}", stdChain.Then(http.HandlerFunc(Neco))).Methods("GET")
 	router.Handle("/homepage/zavody/{race-year}", stdChain.Then(http.HandlerFunc(Zavody))).Methods("GET")
 
-	staticFileDirectory := http.Dir("./static/")
+	staticFileDirectory := http.Dir(conf.AppPath + "/static/")
 	// Declare the handler, that routes requests to their respective filename.
 	// The fileserver is wrapped in the `stripPrefix` method, because we want to
 	// remove the "/assets/" prefix when looking for files.
